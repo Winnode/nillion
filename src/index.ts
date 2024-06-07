@@ -22,19 +22,20 @@ import {
 })();
 
 async function initWallets(): Promise<OfflineSigner[]> {
-  const mnemonics = [
-    process.env.MNEMONIC1 ?? "",
-    process.env.MNEMONIC2 ?? "",
-    process.env.MNEMONIC3 ?? "",
-    process.env.MNEMONIC4 ?? "",
-    process.env.MNEMONIC5 ?? ""
-  ].filter(mnemonic => mnemonic !== "");
-
+  const mnemonics = getMnemonicsFromEnv();
+  
   const wallets = await Promise.all(
     mnemonics.map(mnemonic => DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "nillion" }))
   );
 
   return wallets;
+}
+
+function getMnemonicsFromEnv(): string[] {
+  return Object.keys(process.env)
+    .filter(key => key.startsWith('MNEMONIC'))
+    .map(key => process.env[key] ?? "")
+    .filter(mnemonic => mnemonic !== "");
 }
 
 async function createReceiveAddress(): Promise<string> {
@@ -51,7 +52,7 @@ async function sendTransaction(wallet: OfflineSigner) {
     rpcEndpoint,
     wallet,
     {
-      gasPrice: GasPrice.fromString('0.000001unil'),
+      gasPrice: GasPrice.fromString('0.000002unil'),
     }
   );
 
