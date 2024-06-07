@@ -58,7 +58,7 @@ async function sendTransaction(wallet: OfflineSigner) {
     rpcEndpoint,
     wallet,
     {
-      gasPrice: GasPrice.fromString('0.002unil'),
+      gasPrice: GasPrice.fromString('0.000001unil'),
     }
   );
 
