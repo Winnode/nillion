@@ -25,7 +25,9 @@ async function initWallets(): Promise<OfflineSigner[]> {
   const mnemonics = [
     process.env.MNEMONIC1 ?? "",
     process.env.MNEMONIC2 ?? "",
-    process.env.MNEMONIC3 ?? ""
+    process.env.MNEMONIC3 ?? "",
+    process.env.MNEMONIC4 ?? "",
+    process.env.MNEMONIC5 ?? ""
   ].filter(mnemonic => mnemonic !== "");
 
   const wallets = await Promise.all(
