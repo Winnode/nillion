@@ -12,12 +12,16 @@ This project is a bot for the Winnode project that periodically sends $NIL token
 
 ### Installation
 
-1. Clone the repository or download the source code.
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/Winnode/nillion.git
+    ```
 
 2. Navigate to the project directory:
 
     ```bash
-    cd path/to/your/project
+    cd nillion
     ```
 
 3. Initialize a new npm project if you haven't already:
@@ -62,4 +66,4 @@ This project is a bot for the Winnode project that periodically sends $NIL token
 You can run the TypeScript script using `ts-node`:
 
 ```bash
-ts-node path/to/your/script.ts
+ts-node src/index.ts
