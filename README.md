@@ -50,7 +50,11 @@ This project is a bot for the Winnode project that periodically sends $NIL token
 
 ### Configuration
 
-1. Create a `.env` file in the root directory of your project.
+1. Create a `.env` file in the root directory of your project:
+
+    ```bash
+    touch .env
+    ```
 
 2. Add your mnemonic phrases to the `.env` file. Example:
 
@@ -59,6 +63,19 @@ This project is a bot for the Winnode project that periodically sends $NIL token
     MNEMONIC2="your mnemonic phrase 2"
     MNEMONIC3="your mnemonic phrase 3"
     # Add more mnemonics as needed
+    ```
+
+3. Create a `recipients.txt` file in the root directory of your project:
+
+    ```bash
+    touch recipients.txt
+    ```
+
+4. Add recipient addresses to the `recipients.txt` file, one per line. Example:
+
+    ```plaintext
+    nillion1fjg703wl2hzfyp0qhums37melfdrcut4wc24ze
+    nillion1xeg9pupt2qpgmyx5wn8awzul0k4p3l7wpu06zc
     ```
 
 ### Running the Script
