@@ -7,19 +7,45 @@ import {
   GasPrice,
   coins,
 } from '@cosmjs/stargate';
+import * as fs from 'fs';
+import * as readline from 'readline';
 
 (async () => {
   dotenv.config();
   const wallets = await initWallets();
   console.log(banner());
+
+  const choice = await getUserChoice();
+
   while (true) {
     for (const wallet of wallets) {
-      await sendTransaction(wallet);
+      if (choice === '1') {
+        await sendTransaction(wallet, await createReceiveAddress());
+      } else if (choice === '2') {
+        const recipients = await getRecipientsFromFile('recipients.txt');
+        for (const recipient of recipients) {
+          await sendTransaction(wallet, recipient);
+        }
+      }
     }
     console.log('Sleeping for 30 seconds...');
     await sleep(30000);
   }
 })();
+
+async function getUserChoice(): Promise<string> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  return new Promise(resolve => {
+    rl.question('Choose recipient method:\n1. Generate automatically\n2. Read from recipients.txt\n', answer => {
+      rl.close();
+      resolve(answer);
+    });
+  });
+}
 
 async function initWallets(): Promise<OfflineSigner[]> {
   const mnemonics = getMnemonicsFromEnv();
@@ -46,7 +72,12 @@ async function createReceiveAddress(): Promise<string> {
   return firstAccount.address;
 }
 
-async function sendTransaction(wallet: OfflineSigner) {
+async function getRecipientsFromFile(filePath: string): Promise<string[]> {
+  const data = await fs.promises.readFile(filePath, 'utf-8');
+  return data.split('\n').filter(line => line.trim() !== '');
+}
+
+async function sendTransaction(wallet: OfflineSigner, recipient: string) {
   const rpcEndpoint = 'https://nillion-testnet-rpc.polkachu.com/';
   const client = await SigningStargateClient.connectWithSigner(
     rpcEndpoint,
@@ -56,9 +87,7 @@ async function sendTransaction(wallet: OfflineSigner) {
     }
   );
 
-  const recipient = await createReceiveAddress();
   const amount = coins(1, 'unil');
-
   const [firstAccount] = await wallet.getAccounts();
   console.log(`Send $NIL from ${firstAccount.address} to ${recipient}`);
 
